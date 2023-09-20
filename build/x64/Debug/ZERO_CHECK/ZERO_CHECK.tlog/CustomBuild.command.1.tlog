@@ -1,0 +1,10 @@
+^C:\USERS\WILLIAM HAUGERUD\PROJECTS\OPENCV_TEST\BUILD\CMAKEFILES\5B558C8687BF90EF90C62E976CF03417\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/William Haugerud/projects/OpenCV_test" "-BC:/Users/William Haugerud/projects/OpenCV_test/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/William Haugerud/projects/OpenCV_test/build/OPENCV_TEST.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
