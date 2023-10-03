@@ -5,6 +5,7 @@ C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeCommonLanguageInclude.cmake
 C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeGenericSystem.cmake
 C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeInitializeConfigs.cmake
 C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeLanguageInformation.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeParseImplicitLinkInfo.cmake
 C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeRCInformation.cmake
 C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeSystemSpecificInformation.cmake
 C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeSystemSpecificInitialize.cmake
@@ -21,6 +22,7 @@ C:/Program Files/CMake/share/cmake-3.27/Modules/Compiler/MSVC-C.cmake
 C:/Program Files/CMake/share/cmake-3.27/Modules/Compiler/MSVC-CXX.cmake
 C:/Program Files/CMake/share/cmake-3.27/Modules/Compiler/MSVC.cmake
 C:/Program Files/CMake/share/cmake-3.27/Modules/DartConfiguration.tcl.in
+C:/Program Files/CMake/share/cmake-3.27/Modules/FindOpenMP.cmake
 C:/Program Files/CMake/share/cmake-3.27/Modules/FindPackageHandleStandardArgs.cmake
 C:/Program Files/CMake/share/cmake-3.27/Modules/FindPackageMessage.cmake
 C:/Program Files/CMake/share/cmake-3.27/Modules/FindThreads.cmake

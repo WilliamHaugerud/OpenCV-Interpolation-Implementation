@@ -6,6 +6,7 @@ enable_testing()
 
 find_package(OpenCV REQUIRED)
 find_package(Threads REQUIRED)
+find_package(OpenMP)
 
 add_executable(OPENCV_TEST main.cpp)
 
@@ -15,3 +16,6 @@ include(CPack)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 target_link_libraries(OPENCV_TEST ${OpenCV_LIBS} ${CMAKE_THREAD_LIBS_INIT})
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(OPENCV_TEST OpenMP::OpenMP_CXX)
+endif()

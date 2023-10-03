@@ -385,3 +385,211 @@ events:
         
       exitCode: 1
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "CMakeLists.txt:9 (find_package)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-0nhc2r"
+      binary: "C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-0nhc2r"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_openmp"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-0nhc2r'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_a3215.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.7.2+d6990bcfa for .NET Framework
+        Build started 03.10.2023 11:20:48.
+        
+        Project "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0nhc2r\\cmTC_a3215.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_a3215.dir\\Debug\\".
+          Creating directory "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0nhc2r\\Debug\\".
+          Creating directory "cmTC_a3215.dir\\Debug\\cmTC_a3215.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_a3215.dir\\Debug\\cmTC_a3215.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_a3215.dir\\Debug\\cmTC_a3215.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX86\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /openmp /Fo"cmTC_a3215.dir\\Debug\\\\" /Fd"cmTC_a3215.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0nhc2r\\OpenMPTryFlag.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.37.32822 for x64
+          OpenMPTryFlag.c
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /openmp /Fo"cmTC_a3215.dir\\Debug\\\\" /Fd"cmTC_a3215.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0nhc2r\\OpenMPTryFlag.c"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX86\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0nhc2r\\Debug\\cmTC_a3215.exe" /INCREMENTAL /ILK:"cmTC_a3215.dir\\Debug\\cmTC_a3215.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-0nhc2r/Debug/cmTC_a3215.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-0nhc2r/Debug/cmTC_a3215.lib" /MACHINE:X64  /machine:x64 cmTC_a3215.dir\\Debug\\OpenMPTryFlag.obj
+          cmTC_a3215.vcxproj -> C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0nhc2r\\Debug\\cmTC_a3215.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_a3215.dir\\Debug\\cmTC_a3215.tlog\\unsuccessfulbuild".
+          Touching "cmTC_a3215.dir\\Debug\\cmTC_a3215.tlog\\cmTC_a3215.lastbuildstate".
+        Done Building Project "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0nhc2r\\cmTC_a3215.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.65
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "CMakeLists.txt:9 (find_package)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-dx3n5b"
+      binary: "C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-dx3n5b"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_openmp"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-dx3n5b'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_ae963.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.7.2+d6990bcfa for .NET Framework
+        Build started 03.10.2023 11:20:48.
+        
+        Project "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-dx3n5b\\cmTC_ae963.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_ae963.dir\\Debug\\".
+          Creating directory "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-dx3n5b\\Debug\\".
+          Creating directory "cmTC_ae963.dir\\Debug\\cmTC_ae963.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_ae963.dir\\Debug\\cmTC_ae963.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_ae963.dir\\Debug\\cmTC_ae963.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX86\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /openmp /Fo"cmTC_ae963.dir\\Debug\\\\" /Fd"cmTC_ae963.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-dx3n5b\\OpenMPTryFlag.cpp"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.37.32822 for x64
+          OpenMPTryFlag.cpp
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /openmp /Fo"cmTC_ae963.dir\\Debug\\\\" /Fd"cmTC_ae963.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-dx3n5b\\OpenMPTryFlag.cpp"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX86\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-dx3n5b\\Debug\\cmTC_ae963.exe" /INCREMENTAL /ILK:"cmTC_ae963.dir\\Debug\\cmTC_ae963.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-dx3n5b/Debug/cmTC_ae963.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-dx3n5b/Debug/cmTC_ae963.lib" /MACHINE:X64  /machine:x64 cmTC_ae963.dir\\Debug\\OpenMPTryFlag.obj
+          cmTC_ae963.vcxproj -> C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-dx3n5b\\Debug\\cmTC_ae963.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_ae963.dir\\Debug\\cmTC_ae963.tlog\\unsuccessfulbuild".
+          Touching "cmTC_ae963.dir\\Debug\\cmTC_ae963.tlog\\cmTC_ae963.lastbuildstate".
+        Done Building Project "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-dx3n5b\\cmTC_ae963.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.53
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindOpenMP.cmake:419 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindOpenMP.cmake:557 (_OPENMP_GET_SPEC_DATE)"
+      - "CMakeLists.txt:9 (find_package)"
+    description: "Detecting C OpenMP version"
+    directories:
+      source: "C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-vo1n1k"
+      binary: "C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-vo1n1k"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
+    buildResult:
+      variable: "OpenMP_SPECTEST_C_"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-vo1n1k'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_0af71.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.7.2+d6990bcfa for .NET Framework
+        Build started 03.10.2023 11:20:49.
+        
+        Project "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-vo1n1k\\cmTC_0af71.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_0af71.dir\\Debug\\".
+          Creating directory "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-vo1n1k\\Debug\\".
+          Creating directory "cmTC_0af71.dir\\Debug\\cmTC_0af71.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_0af71.dir\\Debug\\cmTC_0af71.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_0af71.dir\\Debug\\cmTC_0af71.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX86\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /openmp /Fo"cmTC_0af71.dir\\Debug\\\\" /Fd"cmTC_0af71.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-vo1n1k\\OpenMPCheckVersion.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.37.32822 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          OpenMPCheckVersion.c
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /openmp /Fo"cmTC_0af71.dir\\Debug\\\\" /Fd"cmTC_0af71.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-vo1n1k\\OpenMPCheckVersion.c"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX86\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-vo1n1k\\Debug\\cmTC_0af71.exe" /INCREMENTAL /ILK:"cmTC_0af71.dir\\Debug\\cmTC_0af71.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-vo1n1k/Debug/cmTC_0af71.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-vo1n1k/Debug/cmTC_0af71.lib" /MACHINE:X64  /machine:x64 cmTC_0af71.dir\\Debug\\OpenMPCheckVersion.obj
+          cmTC_0af71.vcxproj -> C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-vo1n1k\\Debug\\cmTC_0af71.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_0af71.dir\\Debug\\cmTC_0af71.tlog\\unsuccessfulbuild".
+          Touching "cmTC_0af71.dir\\Debug\\cmTC_0af71.tlog\\cmTC_0af71.lastbuildstate".
+        Done Building Project "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-vo1n1k\\cmTC_0af71.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.53
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindOpenMP.cmake:419 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindOpenMP.cmake:557 (_OPENMP_GET_SPEC_DATE)"
+      - "CMakeLists.txt:9 (find_package)"
+    description: "Detecting CXX OpenMP version"
+    directories:
+      source: "C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-6mwvan"
+      binary: "C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-6mwvan"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
+    buildResult:
+      variable: "OpenMP_SPECTEST_CXX_"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-6mwvan'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_0776f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.7.2+d6990bcfa for .NET Framework
+        Build started 03.10.2023 11:20:50.
+        
+        Project "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6mwvan\\cmTC_0776f.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_0776f.dir\\Debug\\".
+          Creating directory "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6mwvan\\Debug\\".
+          Creating directory "cmTC_0776f.dir\\Debug\\cmTC_0776f.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_0776f.dir\\Debug\\cmTC_0776f.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_0776f.dir\\Debug\\cmTC_0776f.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX86\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /openmp /Fo"cmTC_0776f.dir\\Debug\\\\" /Fd"cmTC_0776f.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6mwvan\\OpenMPCheckVersion.cpp"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.37.32822 for x64
+          OpenMPCheckVersion.cpp
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /openmp /Fo"cmTC_0776f.dir\\Debug\\\\" /Fd"cmTC_0776f.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6mwvan\\OpenMPCheckVersion.cpp"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX86\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6mwvan\\Debug\\cmTC_0776f.exe" /INCREMENTAL /ILK:"cmTC_0776f.dir\\Debug\\cmTC_0776f.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-6mwvan/Debug/cmTC_0776f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/William Haugerud/projects/OpenCV_test/build/CMakeFiles/CMakeScratch/TryCompile-6mwvan/Debug/cmTC_0776f.lib" /MACHINE:X64  /machine:x64 cmTC_0776f.dir\\Debug\\OpenMPCheckVersion.obj
+          cmTC_0776f.vcxproj -> C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6mwvan\\Debug\\cmTC_0776f.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_0776f.dir\\Debug\\cmTC_0776f.tlog\\unsuccessfulbuild".
+          Touching "cmTC_0776f.dir\\Debug\\cmTC_0776f.tlog\\cmTC_0776f.lastbuildstate".
+        Done Building Project "C:\\Users\\William Haugerud\\projects\\OpenCV_test\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6mwvan\\cmTC_0776f.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.55
+        
+      exitCode: 0
+...
