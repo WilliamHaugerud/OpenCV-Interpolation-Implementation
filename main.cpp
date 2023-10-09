@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <iomanip>
+#include <time.h>
 
 #include "nearestNeighbor.h"
 #include "bilinear.h"
@@ -23,36 +24,9 @@ void manualBlur(const cv::Mat& inputImage, cv::Mat& outputImage, int kernelSize)
     // Apply the convolution operation to blur the input image
     cv::filter2D(inputImage, outputImage, -1, kernel);
 }
-uint8_t clampToByte(float value) {
-    if (value < 0.0f) {
-        return 0;
-    } else if (value > 255.0f) {
-        return 255;
-    } else {
-        return static_cast<uint8_t>(value);
-    }
-}
-
-void blurImage(cv::Mat& inputImage, cv::Mat& outputImage, int kernelSize) {
-    // Apply Gaussian blur to the input image
-    cv::GaussianBlur(inputImage, outputImage, cv::Size(kernelSize, kernelSize), 0);
-}
-void scaleImage(cv::Mat& input_img, cv::Mat& output_img, float scale) {
-    // Scale image. Using int will scale to nearest whole number
-    int target_width = static_cast<int>(input_img.rows * scale);
-    int target_height = static_cast<int>(input_img.cols * scale);
-    /*INTER_NEAREST - a nearest-neighbor interpolation
-    INTER_LINEAR - a bilinear interpolation (used by default)
-    INTER_AREA - resampling using pixel area relation. It may be a preferred method for image decimation, as it gives moire’-free results. But when the image is zoomed, it is similar to the INTER_NEAREST method.
-    INTER_CUBIC - a bicubic interpolation over 4x4 pixel neighborhood
-    INTER_LANCZOS4 - a Lanczos interpolation over 8x8 pixel neighborhood*/
-    resize(input_img, output_img, cv::Size(target_width, target_height), INTER_CUBIC);
-}
-
-
-
 //Average quadrants and bilinear interpolate
 cv::Mat resizeCustom(const cv::Mat& src, int newWidth, int newHeight) {
+
     int srcWidth = src.cols;
     int srcHeight = src.rows;
     int padding = 4;
@@ -161,8 +135,65 @@ cv::Mat resizeCustom(const cv::Mat& src, int newWidth, int newHeight) {
     return dst;
 }
 
+void blurImage(cv::Mat& inputImage, cv::Mat& outputImage, int kernelSize) {
+    // Apply Gaussian blur to the input image
+    cv::GaussianBlur(inputImage, outputImage, cv::Size(kernelSize, kernelSize), 0);
+}
+void scaleImage(cv::Mat& input_img, cv::Mat& output_img, float scale) {
+    // Scale image. Using int will scale to nearest whole number
+    int target_width = static_cast<int>(input_img.rows * scale);
+    int target_height = static_cast<int>(input_img.cols * scale);
+    /*INTER_NEAREST - a nearest-neighbor interpolation
+    INTER_LINEAR - a bilinear interpolation (used by default)
+    INTER_AREA - resampling using pixel area relation. It may be a preferred method for image decimation, as it gives moire’-free results. But when the image is zoomed, it is similar to the INTER_NEAREST method.
+    INTER_CUBIC - a bicubic interpolation over 4x4 pixel neighborhood
+    INTER_LANCZOS4 - a Lanczos interpolation over 8x8 pixel neighborhood*/
+    resize(input_img, output_img, cv::Size(target_width, target_height), INTER_CUBIC);
+}
+
+cv::Mat stochasticExample (int width, int height, int size){
+    // Create a distribution of jittered samples.
+    Mat image(width, height, CV_8UC3, Scalar(0, 0, 0));
+    srand(static_cast<unsigned>(time(0)));
+    int x,y;
+    int jx,jy;
+    for (y = 0; y < height; y+= size){
+        for (x = 0; x < width; x += size){
+            double random_number_x = static_cast<double>(rand()) / RAND_MAX;
+            double random_number_y = static_cast<double>(rand()) / RAND_MAX;
+            jx = static_cast<int>(size*random_number_x);
+            jy = static_cast<int>(size*random_number_y);
+            image.at<cv::Vec3b>(y+jy, x+jx) = cv::Vec3b(255, 255, 255); // White color
+        }
+    }
+    return image;
+}
+
+
+/*
 int main(int argc, char** argv )
 {
+    int width = 512;
+    int height = 512;
+    cv::Mat img;
+    img = imread("C:/Users/William Haugerud/Downloads/lenna.png");
+    //std::cout << "IMG type " << img.type() << std::endl;
+    if ( !img.data )
+    {
+        printf("No image data \n");
+        return -1;
+    }
+    cv::Mat stoch_img = stochasticExample(width, height, 4);
+
+    cv::namedWindow("Stochastic example", WINDOW_NORMAL);
+    cv::imshow("Stochastic", stoch_img);
+
+    waitKey(0);
+    cv::destroyAllWindows();
+    return 0;
+}*/
+
+int main(int argc, char** argv ){
 
     cv::Mat img;
     img = imread("C:/Users/William Haugerud/Downloads/lenna.png");
@@ -175,43 +206,61 @@ int main(int argc, char** argv )
 
     int numRows = img.rows;
     int numCols = img.cols;
-
     //Adjust the scale factor
-    float scale_factor = 1.5;
+    float scale_factor = 2.0;
+    cv::Mat scaled_img; 
+    resize(img, scaled_img, cv::Size(img.rows/2, img.cols/2), INTER_NEAREST);
+    int scaled_rows = scaled_img.rows * scale_factor;
+    int scaled_cols = scaled_img.cols * scale_factor;
+
+
+    
+    
 
     // Print the number of rows and columns
     std::cout << "Number of rows: " << numRows << std::endl;
     std::cout << "Number of columns: " << numCols << std::endl;
     cv::Mat scaled_img_bilinear;
-    //scaleImage(img, scaled_img, 0.5);
-    scaled_img_bilinear = resizeBilinear(img, int(img.rows * scale_factor), int(img.cols * scale_factor));
+    scaled_img_bilinear = resizeBilinear(scaled_img, int(scaled_rows), int(scaled_cols));
     cv::Mat scaled_img_bicubic;
+    cv::Mat scaled_img_bicubic_opencv;
     //scaleImage(img, scaled_img, 0.5);
-    scaled_img_bicubic = resizeBicubic2(img, int(img.rows * scale_factor), int(img.cols * scale_factor));
-    //resize(img, scaled_img_bicubic, cv::Size(int(img.rows * scale_factor), int(img.cols * scale_factor)), INTER_CUBIC);
+    scaled_img_bicubic = resizeBicubic2(scaled_img, int(scaled_rows), int(scaled_cols));
+    resize(scaled_img, scaled_img_bicubic_opencv, cv::Size(int(scaled_rows), int(scaled_cols)), INTER_CUBIC);
     //namedWindow("Scaled image", WINDOW_AUTOSIZE);
     cv::Mat scaled_img_point;
     //blurImage(img, blurred_img, 5);
-    scaled_img_point = resizeNearestNeighbor(img, int(img.rows * scale_factor), int(img.cols * scale_factor));
+    scaled_img_point = resizeNearestNeighbor(scaled_img, int(scaled_rows), int(scaled_cols));
     //namedWindow("Blurred image", WINDOW_AUTOSIZE);
     cv::namedWindow("Display image", WINDOW_NORMAL);
     cv::namedWindow("Bilinear", WINDOW_NORMAL);
     cv::namedWindow("Bicubic", WINDOW_NORMAL);
     cv::namedWindow("Point", WINDOW_NORMAL);
+ 
     cv::resizeWindow("Display image", 1024, 1024);
     cv::resizeWindow("Bilinear", 1024, 1024);
     cv::resizeWindow("Bicubic", 1024, 1024);
     cv::resizeWindow("Point", 1024, 1024);
 
+    /*
+    std::cout << "Number of rows opencv: " << scaled_img_bicubic_opencv.rows << std::endl;
+    std::cout << "Number of columns opencv: " << scaled_img_bicubic_opencv.cols << std::endl;
+
+    std::cout << "Number of rows mine: " << scaled_img_bicubic.rows << std::endl;
+    std::cout << "Number of columns mine: " << scaled_img_bicubic.cols << std::endl;
+    */
 
 
-    std::cout << "SSIM : " << getMSSIM(scaled_img_bilinear, scaled_img_bicubic) << std::endl;
-
+    std::cout << "SSIM mine : " << getMSSIM(scaled_img_bicubic, img) << std::endl;
+    std::cout << "PSNR mine : " << getPSNR(scaled_img_bicubic, img) << std::endl;
+    std::cout << "SSIM opencv : " << getMSSIM(scaled_img_bicubic_opencv, img) << std::endl;
+    std::cout << "PSNR opencv : " << getPSNR(scaled_img_bicubic_opencv, img) << std::endl;
+ 
     
     cv::imshow("Display image", img);
     cv::imshow("Bilinear", scaled_img_bilinear);
     cv::imshow("Bicubic", scaled_img_bicubic);
-    cv::imshow("Point", scaled_img_point);
+    cv::imshow("Point", scaled_img_bicubic_opencv);
     waitKey(0);
     cv::destroyAllWindows();
     return 0;

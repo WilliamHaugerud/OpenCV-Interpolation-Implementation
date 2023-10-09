@@ -6,6 +6,8 @@
 
 
 
+const int array_size = 16;
+
 double cubicInterpolationWeight(float t) {
     // Cubic interpolation weight function
     if (t < 0) t = -t;
@@ -144,6 +146,91 @@ cv::Vec3b BiCubicInterpolation(const cv::Mat& image, float x, float y) {
         
     }
     // The output is a vector containing all the colorchannel BGR
+    return output; 
+}
+
+
+int* generateRandomArray(int size) {
+    // Seed the random number generator with the current time
+    srand(static_cast<unsigned>(time(nullptr)));
+    int random_index = rand() % size;
+    // Create a dynamic array of the specified size
+    int* my_array = new int[size];
+
+    // Initialize the array with zeros
+    for (int i = 0; i < size; i++) {
+        my_array[i] = 0;
+    }
+
+    // Check if the index is within the valid range
+    if (random_index >= 0 && random_index < size) {
+        my_array[random_index] = 1;
+    } else {
+        std::cerr << "Index out of range!" << std::endl;
+    }
+
+    return my_array;
+}
+
+cv::Vec3b BiCubicInterpolationStochastic(const cv::Mat& image, float x, float y) {
+    //https://www.codeproject.com/Articles/236394/Bi-Cubic-and-Bi-Linear-Interpolation-with-GLSL
+    // Adapted code
+    int width = image.cols;
+    int height = image.rows;
+    
+    int x_floor = static_cast<int>(floor(x));
+    int y_floor = static_cast<int>(floor(y));
+    
+    cv::Vec3f nSum(0.0, 0.0, 0.0);
+    cv::Vec3f nDenom(0.0, 0.0, 0.0);
+    float a = x - x_floor;
+    float b = y - y_floor;
+
+    int* result_array = generateRandomArray(array_size);
+  
+    for (int m = -1; m <= 2; m++) {
+        for (int n = -1; n <= 2; n++) {
+            int xSample = x_floor + m;
+            int ySample = y_floor + n;
+            // Handle edge cases. 
+
+
+            if (xSample >= 0 && xSample < width && ySample >= 0 && ySample < height && result_array[(m + 1) + (n + 1)] == 0 ) {
+
+                //Gather image data and place it in vecdata.
+                //As .at returns Vec3b we need to static cast to Vec3f
+                cv::Vec3f vecData = static_cast<cv::Vec3f>(image.at<cv::Vec3b>(ySample, xSample));
+                float f = CatMullRom(static_cast<float>(m) - a);
+                cv::Vec3f vecCooef1(f, f, f);
+                float f1 = CatMullRom(-(static_cast<float>(n) - b));
+                cv::Vec3f vecCoeef2(f1, f1, f1);
+                //Clean up later. 
+                nSum += vecData.mul(vecCoeef2.mul(vecCooef1));
+                //nSum[0] += (vecData[0] * vecCoeef2[0] * vecCooef1)[0];
+                //nSum[1] += (vecData[1] * vecCoeef2[1] * vecCooef1[1]);
+                //nSum[2] += (vecData[2] * vecCoeef2[2] * vecCooef1[2]);
+                nDenom += vecCoeef2.mul(vecCooef1);
+                //nDenom[0] += (vecCoeef2[0] * vecCooef1[0]);
+                //nDenom[1] += (vecCoeef2[1] * vecCooef1[1]);
+                //nDenom[2] += (vecCoeef2[2] * vecCooef1[2]);
+            }
+        }
+    } 
+    //std::cout << "Sum: " << nSum<< std::endl;
+    //std::cout << "Denom: " << nDenom<< std::endl;
+    // OpenCV does not support element-wise division https://github.com/opencv/opencv/issues/23115
+    // Have to brute force
+    cv::Vec3b output(0, 0, 0);
+    for (int color = 0; color < image.channels(); color++)
+    {
+        //Calculations are done in floating point, so we need to clamp the answer to uchar
+        output[color] = static_cast<uchar>(std::clamp((nSum[color] / nDenom[color]), 0.0f, 255.0f));
+
+        //std::cout << "Ouutput: " << output[color] << std::endl;
+        
+    }
+    // The output is a vector containing all the colorchannel BGR
+    delete[] result_array;
     return output; 
 }
 
