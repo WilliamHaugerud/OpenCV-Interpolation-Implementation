@@ -8,20 +8,7 @@
 
 const int array_size = 16;
 
-double cubicInterpolationWeight(float t) {
-    // Cubic interpolation weight function
-    if (t < 0) t = -t;
-    float t2 = t * t;
-    float t3 = t2 * t;
-    if (t <= 1.0f) {
-        return 1.5f * t3 - 2.5f * t2 + 1.0f;
-    } else if (t <= 2.0f) {
-        return -0.5f * t3 + 2.5f * t2 - 4.0f * t + 2.0f;
-    } else {
-        return 0.0f;
-    }
-}
-double Triangular(float f) {
+double triangular(float f) {
     f = f / 2.0;
     if (f < 0.0) {
         return (f + 1.0);
@@ -29,7 +16,7 @@ double Triangular(float f) {
         return (1.0 - f);
     }
 }
-double BellFunc( double x )
+double bellFunc( double x )
 {
 	float f = ( x / 2.0 ) * 1.5; // Converting -2 to +2 to -1.5 to +1.5
 	if( f > -1.5 && f < -0.5 )
@@ -64,7 +51,7 @@ double BSpline( float x )
 	}
 	return 1.0;
 }  
-double CatMullRom( float x )
+double catMullRom(float x)
 {
     const float B = 0.0;
     const float C = 0.5;
@@ -91,85 +78,77 @@ double CatMullRom( float x )
         return 0.0;
     }
 } 
-
-cv::Vec3b BiCubicInterpolation(const cv::Mat& image, float x, float y) {
-    //https://www.codeproject.com/Articles/236394/Bi-Cubic-and-Bi-Linear-Interpolation-with-GLSL
-    // Adapted code
+//https://www.codeproject.com/Articles/236394/Bi-Cubic-and-Bi-Linear-Interpolation-with-GLSL
+cv::Vec3b biCubicInterpolation(const cv::Mat& image, float x, float y) {
     int width = image.cols;
     int height = image.rows;
-    
+
     int x_floor = static_cast<int>(floor(x));
     int y_floor = static_cast<int>(floor(y));
-    
-    cv::Vec3f nSum(0.0, 0.0, 0.0);
-    cv::Vec3f nDenom(0.0, 0.0, 0.0);
+
+    cv::Vec3f n_sum(0.0, 0.0, 0.0);
+    cv::Vec3f n_denom(0.0, 0.0, 0.0);
     float a = x - x_floor;
     float b = y - y_floor;
-  
+
     for (int m = -1; m <= 2; m++) {
         for (int n = -1; n <= 2; n++) {
-            int xSample = x_floor + m;
-            int ySample = y_floor + n;
-            // Handle edge cases. 
-            if (xSample >= 0 && xSample < width && ySample >= 0 && ySample < height) {
-
-                //Gather image data and place it in vecdata.
-                //As .at returns Vec3b we need to static cast to Vec3f
-                cv::Vec3f vecData = static_cast<cv::Vec3f>(image.at<cv::Vec3b>(ySample, xSample));
-                float f = CatMullRom(static_cast<float>(m) - a);
-                cv::Vec3f vecCooef1(f, f, f);
-                float f1 = CatMullRom(-(static_cast<float>(n) - b));
-                cv::Vec3f vecCoeef2(f1, f1, f1);
-                //Clean up later. 
-                nSum += vecData.mul(vecCoeef2.mul(vecCooef1));
-                //nSum[0] += (vecData[0] * vecCoeef2[0] * vecCooef1)[0];
-                //nSum[1] += (vecData[1] * vecCoeef2[1] * vecCooef1[1]);
-                //nSum[2] += (vecData[2] * vecCoeef2[2] * vecCooef1[2]);
-                nDenom += vecCoeef2.mul(vecCooef1);
-                //nDenom[0] += (vecCoeef2[0] * vecCooef1[0]);
-                //nDenom[1] += (vecCoeef2[1] * vecCooef1[1]);
-                //nDenom[2] += (vecCoeef2[2] * vecCooef1[2]);
+            int x_sample = x_floor + m;
+            int y_sample = y_floor + n;
+            // Handle edge cases.
+            if (x_sample >= 0 && x_sample < width && y_sample >= 0 && y_sample < height) {
+                // Gather image data and place it in vecdata.
+                // As .at returns Vec3b we need to static cast to Vec3f
+                // Change to Vec3d to use double instead for the return?
+                cv::Vec3f vec_data = static_cast<cv::Vec3f>(image.at<cv::Vec3b>(y_sample, x_sample));
+                float f = catMullRom(static_cast<float>(m) - a);
+                cv::Vec3f vec_coeff1(f, f, f);
+                float f1 = catMullRom(-(static_cast<float>(n) - b));
+                cv::Vec3f vec_coeff2(f1, f1, f1);
+                n_sum += vec_data.mul(vec_coeff2.mul(vec_coeff1));
+                n_denom += vec_coeff2.mul(vec_coeff1);
             }
         }
-    } 
-    //std::cout << "Sum: " << nSum<< std::endl;
-    //std::cout << "Denom: " << nDenom<< std::endl;
+    }
     // OpenCV does not support element-wise division https://github.com/opencv/opencv/issues/23115
     // Have to brute force
     cv::Vec3b output(0, 0, 0);
-    for (int color = 0; color < image.channels(); color++)
-    {
-        //Calculations are done in floating point, so we need to clamp the answer to uchar
-        output[color] = static_cast<uchar>(std::clamp((nSum[color] / nDenom[color]), 0.0f, 255.0f));
-
-        //std::cout << "Ouutput: " << output[color] << std::endl;
-        
+    for (int color = 0; color < image.channels(); color++) {
+        // Calculations are done in floating point, so we need to clamp the answer to uchar
+        output[color] = static_cast<uchar>(std::clamp((n_sum[color] / n_denom[color]), 0.0f, 255.0f));
     }
-    // The output is a vector containing all the colorchannel BGR
-    return output; 
+    // The output is a vector containing all the color channel BGR
+    return output;
 }
 
 
 int* generateRandomArray(int size) {
     // Seed the random number generator with the current time
-    srand(static_cast<unsigned>(time(nullptr)));
-    int random_index = rand() % size;
+    srand(static_cast<unsigned>(time(0)));
+    int count = 0;
     // Create a dynamic array of the specified size
     int* my_array = new int[size];
 
     // Initialize the array with zeros
     for (int i = 0; i < size; i++) {
-        my_array[i] = 0;
+        my_array[i] = 1;
     }
-
-    // Check if the index is within the valid range
-    if (random_index >= 0 && random_index < size) {
-        my_array[random_index] = 1;
-    } else {
-        std::cerr << "Index out of range!" << std::endl;
+    //random unobtainable number
+    int last_placed = 300;
+    for (int i = 0; i < count; i++)
+    {   
+        before_loop:
+        int random_index = rand() % size;
+        if (my_array[random_index] != 0){
+            my_array[random_index] = 0;
+            
+        }else {
+            goto before_loop;
+        }   
     }
 
     return my_array;
+
 }
 
 cv::Vec3b BiCubicInterpolationStochastic(const cv::Mat& image, float x, float y) {
@@ -186,7 +165,9 @@ cv::Vec3b BiCubicInterpolationStochastic(const cv::Mat& image, float x, float y)
     float a = x - x_floor;
     float b = y - y_floor;
 
-    int* result_array = generateRandomArray(array_size);
+    int* result_array_b = generateRandomArray(array_size);
+    int* result_array_g = generateRandomArray(array_size);
+    int* result_array_r = generateRandomArray(array_size);
   
     for (int m = -1; m <= 2; m++) {
         for (int n = -1; n <= 2; n++) {
@@ -195,25 +176,26 @@ cv::Vec3b BiCubicInterpolationStochastic(const cv::Mat& image, float x, float y)
             // Handle edge cases. 
 
 
-            if (xSample >= 0 && xSample < width && ySample >= 0 && ySample < height && result_array[(m + 1) + (n + 1)] == 0 ) {
+            if (xSample >= 0 && xSample < width && ySample >= 0 && ySample < height && result_array_b[(m + 1) + (n + 1)] == 1) {
 
-                //Gather image data and place it in vecdata.
-                //As .at returns Vec3b we need to static cast to Vec3f
-                cv::Vec3f vecData = static_cast<cv::Vec3f>(image.at<cv::Vec3b>(ySample, xSample));
-                float f = CatMullRom(static_cast<float>(m) - a);
-                cv::Vec3f vecCooef1(f, f, f);
-                float f1 = CatMullRom(-(static_cast<float>(n) - b));
-                cv::Vec3f vecCoeef2(f1, f1, f1);
-                //Clean up later. 
-                nSum += vecData.mul(vecCoeef2.mul(vecCooef1));
-                //nSum[0] += (vecData[0] * vecCoeef2[0] * vecCooef1)[0];
-                //nSum[1] += (vecData[1] * vecCoeef2[1] * vecCooef1[1]);
-                //nSum[2] += (vecData[2] * vecCoeef2[2] * vecCooef1[2]);
-                nDenom += vecCoeef2.mul(vecCooef1);
-                //nDenom[0] += (vecCoeef2[0] * vecCooef1[0]);
-                //nDenom[1] += (vecCoeef2[1] * vecCooef1[1]);
-                //nDenom[2] += (vecCoeef2[2] * vecCooef1[2]);
+            //Gather image data and place it in vecdata.
+            //As .at returns Vec3b we need to static cast to Vec3f
+            cv::Vec3f vecData = static_cast<cv::Vec3f>(image.at<cv::Vec3b>(ySample, xSample));
+            float f = catMullRom(static_cast<float>(m) - a);
+            cv::Vec3f vecCooef1(f, f, f);
+            float f1 = catMullRom(-(static_cast<float>(n) - b));
+            cv::Vec3f vecCoeef2(f1, f1, f1);
+            //Clean up later. 
+            nSum += vecData.mul(vecCoeef2.mul(vecCooef1));
+            //nSum[0] += (vecData[0] * vecCoeef2[0] * vecCooef1)[0];
+            //nSum[1] += (vecData[1] * vecCoeef2[1] * vecCooef1[1]);
+            //nSum[2] += (vecData[2] * vecCoeef2[2] * vecCooef1[2]);
+            nDenom += vecCoeef2.mul(vecCooef1);
+            //nDenom[0] += (vecCoeef2[0] * vecCooef1[0]);
+            //nDenom[1] += (vecCoeef2[1] * vecCooef1[1]);
+            //nDenom[2] += (vecCoeef2[2] * vecCooef1[2]);
             }
+            
         }
     } 
     //std::cout << "Sum: " << nSum<< std::endl;
@@ -230,52 +212,12 @@ cv::Vec3b BiCubicInterpolationStochastic(const cv::Mat& image, float x, float y)
         
     }
     // The output is a vector containing all the colorchannel BGR
-    delete[] result_array;
+    delete[] result_array_b;
+    delete[] result_array_g;
+    delete[] result_array_r;
     return output; 
 }
 
-
-cv::Mat resizeBicubic1(const cv::Mat& src, int newWidth, int newHeight) {
-    cv::Mat dst(newHeight, newWidth, src.type());
-
-    float scaleX = static_cast<float>(src.cols) / newWidth;
-    float scaleY = static_cast<float>(src.rows) / newHeight;
-
-    for (int y = 0; y < newHeight; y++) {
-        for (int x = 0; x < newWidth; x++) {
-            float srcX = x * scaleX;
-            float srcY = y * scaleY;
-
-            int x0 = static_cast<int>(std::floor(srcX));
-            int y0 = static_cast<int>(std::floor(srcY));
-
-            float dx = srcX - x0;
-            float dy = srcY - y0;
-
-            cv::Vec3f result(0.0f, 0.0f, 0.0f);
-
-            for (int j = -1; j <= 2; j++) {
-                for (int i = -1; i <= 2; i++) {
-                    int xIdx = std::clamp(x0 + i, 0, src.cols - 1);
-                    int yIdx = std::clamp(y0 + j, 0, src.rows - 1);
-
-                    float weightX = cubicInterpolationWeight(dx - i);
-                    float weightY = cubicInterpolationWeight(dy - j);
-
-                    for (int c = 0; c < 3; c++) {
-                        result[c] += src.at<cv::Vec3b>(yIdx, xIdx)[c] * weightX * weightY;
-                    }
-                }
-            }
-
-            for (int c = 0; c < 3; c++) {
-                dst.at<cv::Vec3b>(y, x)[c] = static_cast<uchar>(std::clamp(result[c], 0.0f, 255.0f));
-            }
-        }
-    }
-
-    return dst;
-}
 //
 /*
 cv::Mat resizeBicubic(const cv::Mat& src, int newWidth, int newHeight) {
@@ -390,19 +332,19 @@ cv::Mat resizeBicubic(const cv::Mat& src, int newWidth, int newHeight) {
     return dst;
 }
 */
-cv::Mat resizeBicubic2(const cv::Mat& src, int newWidth, int newHeight) {
-    int srcWidth = src.cols;
-    int srcHeight = src.rows;
-    float scaleX = static_cast<float>(src.cols) / newWidth;
-    float scaleY = static_cast<float>(src.rows) / newHeight;
-    cv::Mat dst(newHeight, newWidth, src.type());
+cv::Mat resizeBicubic(const cv::Mat& src, int new_width, int new_height) {
+    int src_width = src.cols;
+    int src_height = src.rows;
+    float scale_x = static_cast<float>(src.cols) / new_width;
+    float scale_y = static_cast<float>(src.rows) / new_height;
+    cv::Mat dst(new_height, new_width, src.type());
 
-    for (int y = 0; y < newHeight; y++) {
-        for (int x = 0; x < newWidth; x++) {
+    for (int y = 0; y < new_height; y++) {
+        for (int x = 0; x < new_width; x++) {
             // Calculate the corresponding coordinates in the source image
-            float srcX = x * scaleX;
-            float srcY = y * scaleY;
-            dst.at<cv::Vec3b>(y, x) = BiCubicInterpolation(src, srcX, srcY);;
+            float src_x = x * scale_x;
+            float src_y = y * scale_y;
+            dst.at<cv::Vec3b>(y, x) = biCubicInterpolation(src, src_x, src_y);
         }
     }   
 

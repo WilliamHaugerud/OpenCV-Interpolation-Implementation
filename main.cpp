@@ -154,13 +154,13 @@ void scaleImage(cv::Mat& input_img, cv::Mat& output_img, float scale) {
 cv::Mat stochasticExample (int width, int height, int size){
     // Create a distribution of jittered samples.
     Mat image(width, height, CV_8UC3, Scalar(0, 0, 0));
-    srand(static_cast<unsigned>(time(0)));
+    std::srand(static_cast<unsigned>(time(0)));
     int x,y;
     int jx,jy;
     for (y = 0; y < height; y+= size){
         for (x = 0; x < width; x += size){
-            double random_number_x = static_cast<double>(rand()) / RAND_MAX;
-            double random_number_y = static_cast<double>(rand()) / RAND_MAX;
+            double random_number_x = static_cast<double>(std::rand()) / RAND_MAX;
+            double random_number_y = static_cast<double>(std::rand()) / RAND_MAX;
             jx = static_cast<int>(size*random_number_x);
             jy = static_cast<int>(size*random_number_y);
             image.at<cv::Vec3b>(y+jy, x+jx) = cv::Vec3b(255, 255, 255); // White color
@@ -183,13 +183,31 @@ int main(int argc, char** argv )
         printf("No image data \n");
         return -1;
     }
+
+    int* result_array = generateRandomArray(array_size);
+    for (int i = 0; i < array_size; i++) {
+        std::cout << result_array[i] << " ";
+    }
     cv::Mat stoch_img = stochasticExample(width, height, 4);
+    cv::Mat scaled_img; 
+    cv::Mat scaled_img_bicubic;
+    float scale_factor = 2.0;
+    cv::resize(img, scaled_img, cv::Size(img.rows/2, img.cols/2), INTER_NEAREST);
+    int scaled_rows = scaled_img.rows * scale_factor;
+    int scaled_cols = scaled_img.cols * scale_factor;
+    scaled_img_bicubic = resizeBicubic2(scaled_img, int(scaled_rows), int(scaled_cols));
+    
 
     cv::namedWindow("Stochastic example", WINDOW_NORMAL);
-    cv::imshow("Stochastic", stoch_img);
+    cv::namedWindow("Bicubic", WINDOW_NORMAL);
+    cv::resizeWindow("Stochastic example", 512, 512);
+    //cv::resizeWindow("Bicubic", 1024, 1024);
+    cv::imshow("Stochastic example", stoch_img);
+    cv::imshow("Bicubic", scaled_img_bicubic);
 
-    waitKey(0);
+    cv::waitKey(0);
     cv::destroyAllWindows();
+    delete[] result_array;
     return 0;
 }*/
 
@@ -225,7 +243,7 @@ int main(int argc, char** argv ){
     cv::Mat scaled_img_bicubic;
     cv::Mat scaled_img_bicubic_opencv;
     //scaleImage(img, scaled_img, 0.5);
-    scaled_img_bicubic = resizeBicubic2(scaled_img, int(scaled_rows), int(scaled_cols));
+    scaled_img_bicubic = resizeBicubic(scaled_img, int(scaled_rows), int(scaled_cols));
     resize(scaled_img, scaled_img_bicubic_opencv, cv::Size(int(scaled_rows), int(scaled_cols)), INTER_CUBIC);
     //namedWindow("Scaled image", WINDOW_AUTOSIZE);
     cv::Mat scaled_img_point;
@@ -235,22 +253,23 @@ int main(int argc, char** argv ){
     cv::namedWindow("Display image", WINDOW_NORMAL);
     cv::namedWindow("Bilinear", WINDOW_NORMAL);
     cv::namedWindow("Bicubic", WINDOW_NORMAL);
-    cv::namedWindow("Point", WINDOW_NORMAL);
+    cv::namedWindow("Bicubic opencv", WINDOW_NORMAL);
  
     cv::resizeWindow("Display image", 1024, 1024);
     cv::resizeWindow("Bilinear", 1024, 1024);
     cv::resizeWindow("Bicubic", 1024, 1024);
-    cv::resizeWindow("Point", 1024, 1024);
+    cv::resizeWindow("Bicubic opencv", 1024, 1024);
 
-    /*
+    
     std::cout << "Number of rows opencv: " << scaled_img_bicubic_opencv.rows << std::endl;
     std::cout << "Number of columns opencv: " << scaled_img_bicubic_opencv.cols << std::endl;
 
     std::cout << "Number of rows mine: " << scaled_img_bicubic.rows << std::endl;
     std::cout << "Number of columns mine: " << scaled_img_bicubic.cols << std::endl;
-    */
+    
 
-
+    std::cout << "SSIM bil : " << getMSSIM(scaled_img_bilinear, img) << std::endl;
+    std::cout << "PSNR bil : " << getPSNR(scaled_img_bilinear, img) << std::endl;
     std::cout << "SSIM mine : " << getMSSIM(scaled_img_bicubic, img) << std::endl;
     std::cout << "PSNR mine : " << getPSNR(scaled_img_bicubic, img) << std::endl;
     std::cout << "SSIM opencv : " << getMSSIM(scaled_img_bicubic_opencv, img) << std::endl;
@@ -260,7 +279,7 @@ int main(int argc, char** argv ){
     cv::imshow("Display image", img);
     cv::imshow("Bilinear", scaled_img_bilinear);
     cv::imshow("Bicubic", scaled_img_bicubic);
-    cv::imshow("Point", scaled_img_bicubic_opencv);
+    cv::imshow("Bicubic opencv", scaled_img_bicubic_opencv);
     waitKey(0);
     cv::destroyAllWindows();
     return 0;
