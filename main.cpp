@@ -213,52 +213,66 @@ int main(int argc, char** argv )
 
 int main(int argc, char** argv ){
 
-    cv::Mat img;
-    img = imread("C:/Users/William Haugerud/Downloads/lenna.png");
-    //std::cout << "IMG type " << img.type() << std::endl;
-    if ( !img.data )
+    cv::Mat img_original;
+    img_original = imread("C:/Users/William Haugerud/Downloads/Green_sea_shell_1024x768.jpg");
+    //std::cout << "IMG type " << img_original.type() << std::endl;
+    if ( !img_original.data )
+    {
+        printf("No image data \n");
+        return -1;
+    }
+    cv::Mat img_small;
+    img_small = imread("C:/Users/William Haugerud/Downloads/Green_sea_shell_320x240.jpg");
+    //std::cout << "IMG type " << img_small.type() << std::endl;
+    if ( !img_small.data )
     {
         printf("No image data \n");
         return -1;
     }
 
-    int numRows = img.rows;
-    int numCols = img.cols;
+    int num_cols_original = img_original.rows;
+    int num_rows_original = img_original.cols;
+    
+
+    int num_rows_small = img_small.rows;
+    int num_cols_small = img_small.cols;
+
+
     //Adjust the scale factor
     float scale_factor = 2.0;
-    cv::Mat scaled_img; 
-    resize(img, scaled_img, cv::Size(img.rows/2, img.cols/2), INTER_NEAREST);
-    int scaled_rows = scaled_img.rows * scale_factor;
-    int scaled_cols = scaled_img.cols * scale_factor;
-
-
-    
-    
-
     // Print the number of rows and columns
-    std::cout << "Number of rows: " << numRows << std::endl;
-    std::cout << "Number of columns: " << numCols << std::endl;
+    std::cout << "Number of rows: " << num_rows_small << std::endl;
+    std::cout << "Number of columns: " << num_cols_small << std::endl;
+    //Resizing image with bilinear
     cv::Mat scaled_img_bilinear;
-    scaled_img_bilinear = resizeBilinear(scaled_img, int(scaled_rows), int(scaled_cols));
+    scaled_img_bilinear = resizeBilinear(img_small, int(num_rows_original), int(num_cols_original));
+    //Resizing with opencv bilinear
+    cv::Mat scaled_img_bilinear_opencv;
+    resize(img_small, scaled_img_bilinear_opencv, cv::Size(int(num_rows_original), int(num_cols_original)), 0, 0, INTER_LINEAR);
+    //Resizing image with bicubic
     cv::Mat scaled_img_bicubic;
+    scaled_img_bicubic = resizeBicubic(img_small, int(num_rows_original), int(num_cols_original));
+    //Resizing image with opencv bicubic
     cv::Mat scaled_img_bicubic_opencv;
-    //scaleImage(img, scaled_img, 0.5);
-    scaled_img_bicubic = resizeBicubic(scaled_img, int(scaled_rows), int(scaled_cols));
-    resize(scaled_img, scaled_img_bicubic_opencv, cv::Size(int(scaled_rows), int(scaled_cols)), INTER_CUBIC);
-    //namedWindow("Scaled image", WINDOW_AUTOSIZE);
-    cv::Mat scaled_img_point;
-    //blurImage(img, blurred_img, 5);
-    scaled_img_point = resizeNearestNeighbor(scaled_img, int(scaled_rows), int(scaled_cols));
-    //namedWindow("Blurred image", WINDOW_AUTOSIZE);
-    cv::namedWindow("Display image", WINDOW_NORMAL);
-    cv::namedWindow("Bilinear", WINDOW_NORMAL);
-    cv::namedWindow("Bicubic", WINDOW_NORMAL);
-    cv::namedWindow("Bicubic opencv", WINDOW_NORMAL);
+    resize(img_small, scaled_img_bicubic_opencv, cv::Size(int(num_rows_original), int(num_cols_original)), 0, 0, INTER_CUBIC);
+    //Resizing image with nearest neighbor
+    cv::Mat scaled_img_nearest;
+    scaled_img_nearest = resizeNearestNeighbor(img_small, int(num_rows_original), int(num_cols_original));
+    cv::Mat scaled_img_nearest_opencv;
+    resize(img_small, scaled_img_nearest_opencv, cv::Size(int(num_rows_original), int(num_cols_original)), 0, 0, INTER_NEAREST);
+
+    //Showing images and resizing the window to see better
+    //cv::namedWindow("Original", WINDOW_NORMAL);
+    //cv::namedWindow("Bilinear", WINDOW_NORMAL);
+    //cv::namedWindow("Bicubic", WINDOW_NORMAL);
+    //cv::namedWindow("Bicubic opencv", WINDOW_NORMAL);
+    //cv::namedWindow("Nearest", WINDOW_NORMAL);
  
-    cv::resizeWindow("Display image", 1024, 1024);
-    cv::resizeWindow("Bilinear", 1024, 1024);
-    cv::resizeWindow("Bicubic", 1024, 1024);
-    cv::resizeWindow("Bicubic opencv", 1024, 1024);
+    //cv::resizeWindow("Original", 1024, 768);
+    //cv::resizeWindow("Bilinear", 1024, 768);
+    //cv::resizeWindow("Bicubic", 1024, 768);
+    //cv::resizeWindow("Bicubic opencv", 1024, 768);
+    //cv::resizeWindow("Nearest", 1024, 768);
 
     
     std::cout << "Number of rows opencv: " << scaled_img_bicubic_opencv.rows << std::endl;
@@ -267,19 +281,30 @@ int main(int argc, char** argv ){
     std::cout << "Number of rows mine: " << scaled_img_bicubic.rows << std::endl;
     std::cout << "Number of columns mine: " << scaled_img_bicubic.cols << std::endl;
     
-
-    std::cout << "SSIM bil : " << getMSSIM(scaled_img_bilinear, img) << std::endl;
-    std::cout << "PSNR bil : " << getPSNR(scaled_img_bilinear, img) << std::endl;
-    std::cout << "SSIM mine : " << getMSSIM(scaled_img_bicubic, img) << std::endl;
-    std::cout << "PSNR mine : " << getPSNR(scaled_img_bicubic, img) << std::endl;
-    std::cout << "SSIM opencv : " << getMSSIM(scaled_img_bicubic_opencv, img) << std::endl;
-    std::cout << "PSNR opencv : " << getPSNR(scaled_img_bicubic_opencv, img) << std::endl;
+    //MSSIM/PSNR bilinear 
+    std::cout << "SSIM bil mine: " << getMSSIM(img_original, scaled_img_bilinear) << std::endl;
+    std::cout << "PSNR bil mine: " << getPSNR(img_original, scaled_img_bilinear) << std::endl;
+    std::cout << "SSIM bil opencv: " << getMSSIM(scaled_img_bilinear_opencv, img_original) << std::endl;
+    std::cout << "PSNR bil opencv: " << getPSNR(scaled_img_bilinear_opencv, img_original) << std::endl;
+    //MSSIM/PSNR bicubic
+    std::cout << "SSIM bicubic mine : " << getMSSIM(img_original, scaled_img_bicubic) << std::endl;
+    std::cout << "PSNR bicubic mine : " << getPSNR(img_original, scaled_img_bicubic) << std::endl;
+    std::cout << "SSIM bicubic opencv : " << getMSSIM(img_original, scaled_img_bicubic_opencv) << std::endl;
+    std::cout << "PSNR bicubic opencv : " << getPSNR(img_original, scaled_img_bicubic_opencv) << std::endl;
+    //MSSIM/PSNR nearest
+    std::cout << "SSIM nearest mine: " << getMSSIM(img_original, scaled_img_nearest) << std::endl;
+    std::cout << "PSNR nearest mine: " << getPSNR(img_original, scaled_img_nearest) << std::endl;
+    std::cout << "SSIM nearest opencv: " << getMSSIM(img_original, scaled_img_nearest_opencv) << std::endl;
+    std::cout << "PSNR nearest opencv: " << getPSNR(img_original, scaled_img_nearest_opencv) << std::endl;
  
     
-    cv::imshow("Display image", img);
+    cv::imshow("Original", img_original);
     cv::imshow("Bilinear", scaled_img_bilinear);
+    cv::imshow("Bilinear opencv", scaled_img_nearest_opencv);
     cv::imshow("Bicubic", scaled_img_bicubic);
     cv::imshow("Bicubic opencv", scaled_img_bicubic_opencv);
+    cv::imshow("Nearest opencv", scaled_img_nearest_opencv);
+    cv::imshow("Nearest", scaled_img_nearest);
     waitKey(0);
     cv::destroyAllWindows();
     return 0;
